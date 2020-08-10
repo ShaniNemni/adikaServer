@@ -1,4 +1,4 @@
-export const FilterType = {
+module.exports = {
     COLOR:'color',
     SIZE:'size',
     BRAND:'brand',

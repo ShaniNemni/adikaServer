@@ -1,0 +1,16 @@
+module.exports = {
+    BLACK:'black',
+    GREEN:'green',
+    RED:'red',
+    BROWN:'brown',
+    PINK:'pink',
+    WHITE:'white',
+    BEGIE:'begie',
+    WHITE_CREAM:'white cream',
+    YELLOW:'yellow',
+    ORANGE:'orange',
+    CYAN:'cyan',
+    PINK_CLAY:'pink clay',
+    SILVER:'silver',
+    BLUE:'blue',
+}
