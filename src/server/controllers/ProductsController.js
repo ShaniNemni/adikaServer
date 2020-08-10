@@ -1,7 +1,5 @@
 const products = require('../database/ProductsList');
-const filterType = require('../common/ FilterType');
 const FilterType = require('../common/ FilterType');
-const { filter } = require('../database/ProductsList');
 const limitValue = 12;
 
 function paginationResults(page,model,res) {
