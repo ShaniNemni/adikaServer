@@ -5,5 +5,8 @@ module.exports = {
     M:"m",
     L:"l",
     XL:"xl",
-    XXL:"xxl"
+    XXL:"xxl",
+    UK_2:'uk2',
+    UK_3:'uk3',
+    UK_4:'uk4',
 }
