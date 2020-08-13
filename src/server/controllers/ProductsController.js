@@ -1,6 +1,13 @@
+const moment = require('moment');
 const products = require('../database/ProductsList');
-const FilterType = require('../common/ FilterType');
+const FilterType = require('../common/ FilterType')
+const SortBy = require('../common/SortBy');
 const limitValue = 12;
+
+function getProductsCount(list) {
+    const listToCheck = list ? list : products;
+    return listToCheck.length;
+}
 
 function paginationResults(page,model,res) {
     if(!page) {
@@ -21,7 +28,10 @@ function paginationResults(page,model,res) {
 }
 
 exports.getAllProducts = function(req,res) {
-    res.status(200).json(res.paginatedResults)
+    res.status(200).json({
+        data:res.paginatedResults,
+        productsCount:getProductsCount()
+    })
 }
 
 exports.getAllProductsByCategory = function(req,res){
@@ -29,43 +39,73 @@ exports.getAllProductsByCategory = function(req,res){
     const page = parseInt(req.query.page);
     const results = products.filter(product => product.categoryID === categoryID);
     const pagResult = paginationResults(page,results,res);
-    res.json(pagResult);
+    res.json({data:pagResult,productsCount:getProductsCount()});
 }
 
 exports.getAllProductsByFilter = function(req,res) {
     const filterType = req.query.filterType;
     const filterCondition = req.query.filterCondition;
     const page = parseInt(req.query.page);
+    let results = products;
 
-    let results = [];
+    if(FilterType.COLOR === filterType) {
+        results = results.filter((product) => {
+            const productsColor = product.colors.includes(filterCondition);
+            return productsColor;
+        })
+    }
 
-    switch(filterType) {
-        case FilterType.COLOR:
-            results = products.filter((product) => {
-                const productsColor = product.colors.includes(filterCondition);
-                return productsColor;
-            })
-            break;
-        case FilterType.BRAND:
-            const brandName = filterCondition.toLowerCase();
-            results = products.filter(product => product.brand.toLowerCase() === brandName);
-            break;
-        case FilterType.SIZE:
-            results = products.filter((product) => {
-                const productsSizes = product.sizes.includes(filterCondition);
-                return productsSizes;
-            })
-            break;
-        case FilterType.PRICE:
+    if(FilterType.brand === filterType) {
+        const brandName = filterCondition.toLowerCase();
+        results = results.filter(product => product.brand.toLowerCase() === brandName);
+    }
+
+    if(FilterType.SIZE === filterType) {
+        results = results.filter((product) => {
+            const productsSizes = product.sizes.includes(filterCondition);
+            return productsSizes;
+        })
+    }
+
+    if(FilterType.PRICE === filterType) {
             const conditionString = filterCondition.split("-");
             const minPrice = conditionString[0];
             const maxPrice = conditionString[1];
-            results = products.filter(product => product.price >= minPrice && product.price <= maxPrice);
-            break;
+            results = results.filter(product => product.price >= minPrice && product.price <= maxPrice);
     }
     
     const pagResult = paginationResults(page,results,res);
-    res.json(pagResult);
+    const productsCount = getProductsCount(results);
+    res.json({data:pagResult,productsCount});
+}
+
+exports.productsSortBy = function (req,res) {
+    //sortID
+    const sortByID = parseInt(req.query.sortBy);
+    const page = parseInt(req.query.page);
+    let results = [];
+    switch(sortByID) {
+        case 1: 
+            results = products.sort((a,b) => (a.countSeller < b.countSeller) ? 1 : -1);
+            break;
+        case 2:
+            results = products.sort((a,b) => (a.name > b.name) ? 1 : -1);
+            break;
+        case 3:
+            results = products.sort((a,b) => (a.name < b.name) ? 1 : -1);
+            break;
+        case 4:
+            results = products.sort((a,b) => (a.price > b.price) ? 1 : -1);
+            break;
+        case 5:
+            results = products.sort((a,b) => (a.price < b.price) ? 1 : -1);
+            break;    
+    }
+
+    const pagResult = paginationResults(page,results,res);
+    const productsCount = getProductsCount(results);
+    res.json({data:pagResult,productsCount});
+
 }
 
 //middleware , this is why we need to return req,res,next. for the next function
