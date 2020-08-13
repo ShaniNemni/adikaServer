@@ -28,7 +28,6 @@ function paginationResults(page,model,res) {
 }
 
 exports.getAllProducts = function(req,res) {
-    console.log("allProducts ");
     res.status(200).json({
         data:res.paginatedResults,
         productsCount:getProductsCount()
@@ -40,7 +39,7 @@ exports.getAllProductsByCategory = function(req,res){
     const page = parseInt(req.query.page);
     const results = products.filter(product => product.categoryID === categoryID);
     const pagResult = paginationResults(page,results,res);
-    res.json({data:pagResult,productsCount:getProductsCount()});
+    res.json({data:pagResult,productsCount:getProductsCount(results)});
 }
 
 exports.getAllProductsByFilter = function(req,res) {
