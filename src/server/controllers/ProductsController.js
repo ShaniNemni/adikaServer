@@ -28,6 +28,7 @@ function paginationResults(page,model,res) {
 }
 
 exports.getAllProducts = function(req,res) {
+    console.log("allProducts ");
     res.status(200).json({
         data:res.paginatedResults,
         productsCount:getProductsCount()
