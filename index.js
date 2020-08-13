@@ -6,6 +6,10 @@ const BASE_URL = '/api'
 const productsRouter =  require('./src/server/routes/ProductsRoutes');
 const categoriesRouter = require('./src/server/routes/CategoriesRoutes');
 
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    next();
+  });  
 app.use(`${BASE_URL}/product`,productsRouter);
 app.use(`${BASE_URL}/category`,categoriesRouter);
 
