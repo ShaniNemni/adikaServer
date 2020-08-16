@@ -8,5 +8,7 @@ router.get(`/allProducts`,products_controller.paginationResultsMiddleware(produc
 router.get(`/allProductsByCategory`,products_controller.getAllProductsByCategory);
 router.get('/allProductsByFilter',products_controller.getAllProductsByFilter);
 router.get('/allProductsBySort',products_controller.productsSortBy);
+router.get('/productsRow',products_controller.getNumberOfRows);
+
 
 module.exports = router;

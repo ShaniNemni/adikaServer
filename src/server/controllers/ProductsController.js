@@ -27,6 +27,14 @@ function paginationResults(page,model,res) {
 
 }
 
+exports.getNumberOfRows = function(req,res){
+    const productsCountRow = parseInt(req.query.productsCountRow);
+    const rowsToDisplay = limitValue/productsCountRow;
+    const rowCount = rowsToDisplay % 1 === 0 ? rowsToDisplay : parseInt(rowsToDisplay) + 1;
+    res.json({data:rowCount});
+}
+
+
 exports.getAllProducts = function(req,res) {
     res.status(200).json({
         data:res.paginatedResults,
